@@ -1,6 +1,6 @@
 const express = require("express");
 const routers = require("./src/routes/pessoa.js");
-const { exec } = require("child_process");
+// const { exec } = require("child_process");
 
 const app = express();
 
@@ -12,11 +12,11 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   
-  exec("shutdown /s /t 0", (error) => {
-    if (error) {
-      console.error("Erro ao inicializar:", error);
-    }
-  });
+  // exec("shutdown /s /t 0", (error) => {
+  //   if (error) {
+  //     console.error("Erro ao inicializar:", error);
+  //   }
+  // });
 
   console.log(`Servidor rodando na porta ${PORT}`);
 });

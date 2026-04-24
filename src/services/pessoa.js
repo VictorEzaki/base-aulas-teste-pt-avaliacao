@@ -25,6 +25,8 @@ class ServicoExercicio {
         throw new Error("Favor preencher o senha.")
       }
 
+      if (pessoa.senha.length < 8) throw new Error('Senha deve possuir mais que 8 caracteres');
+
       return repositorio.Adicionar(pessoa)
     }
 
