@@ -15,6 +15,8 @@ class ServicoExercicio {
     }
 
     async Adicionar(pessoa){
+      if (pessoa === null) throw new Error('Pessoa não pode ser null');
+      
       if(!pessoa) {
         throw new Error("Favor preencher o pessoa.")
       } else if(!pessoa.nome) {
@@ -26,6 +28,10 @@ class ServicoExercicio {
       }
 
       if (pessoa.senha.length < 8) throw new Error('Senha deve possuir mais que 8 caracteres');
+
+      if (pessoa.nome.length > 80) throw new Error('O campo nome ultrapassou os limites de caracteres');
+      if (pessoa.senha.length > 80) throw new Error('O campo senha ultrapassou os limites de caracteres');
+      if (pessoa.email.length > 80) throw new Error('O campo e-mail ultrapassou os limites de caracteres');
 
       return repositorio.Adicionar(pessoa)
     }
