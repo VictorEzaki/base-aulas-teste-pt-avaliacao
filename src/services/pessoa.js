@@ -1,56 +1,85 @@
 const RepositorioExercicio= require("../repositories/pessoa.js")
 
+const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // regex para verificar se o e-mail contém 'nome@dominio.extensao'
 const repositorio = new RepositorioExercicio()
 class ServicoExercicio {
-
-    async PegarUm(id){
-      if(!id || isNaN(id)) {
-        throw new Error("Favor corretamente o id.")
-      }
-      return repositorio.PegarUm(id)
+  
+  async PegarUm(id){
+    if(!id || isNaN(id)) {
+      throw new Error("Favor corretamente o id.")
     }
-
-    async PegarTodos(){
-      return repositorio.PegarTodos()
+    return repositorio.PegarUm(id)
+  }
+  
+  async PegarTodos(){
+    return repositorio.PegarTodos()
+  }
+  
+  async Adicionar(pessoa) {
+    if (pessoa === null) {
+      throw new Error("Pessoa não pode ser null");
     }
-
-    async Adicionar(pessoa){
-      if (pessoa === null) throw new Error('Pessoa não pode ser null');
-      
-      if(!pessoa) {
-        throw new Error("Favor preencher o pessoa.")
-      } else if(!pessoa.nome) {
-        throw new Error("Favor preencher o nome.")
-      } else if(!pessoa.email) {
-        throw new Error("Favor preencher o email.")
-      } else if(!pessoa.senha) {
-        throw new Error("Favor preencher o senha.")
-      }
-
-      if (pessoa.senha.length < 8) throw new Error('Senha deve possuir mais que 8 caracteres');
-
-      if (pessoa.nome.length > 80) throw new Error('O campo nome ultrapassou os limites de caracteres');
-      if (pessoa.senha.length > 80) throw new Error('O campo senha ultrapassou os limites de caracteres');
-      if (pessoa.email.length > 80) throw new Error('O campo e-mail ultrapassou os limites de caracteres');
-
-      return repositorio.Adicionar(pessoa)
+    
+    if (!pessoa) {
+      throw new Error("Favor preencher a pessoa.");
     }
-
-    async Alterar(id, pessoa){
-      if(!id || isNaN(id)) {
-        throw new Error("Favor corretamente o id.")
-      }
-
-      return repositorio.Adicionar(pessoa)
+    
+    const { nome, email, senha } = pessoa;
+    
+    // Campos obrigatórios
+    if (!nome || nome.trim() === "") {
+      throw new Error("Favor preencher o nome.");
     }
-
-    async Deletar(id){
-      if(!id || isNaN(id)) {
-        throw new Error("Favor corretamente o id.")
-      }
-
-      return repositorio.Deletar(id)
+    
+    if (!email || email.trim() === "") {
+      throw new Error("Favor preencher o email.");
     }
-
+    
+    if (!senha || senha.trim() === "") {
+      throw new Error("Favor preencher a senha.");
+    }
+    
+    // Validação de e-mail
+    if (!emailValido.test(email)) {
+      throw new Error("E-mail inválido.");
+    }
+    
+    // Regras de senha
+    if (senha.length < 8) {
+      throw new Error("Senha deve possuir mais que 8 caracteres.");
+    }
+    
+    // Limite de caracteres
+    if (nome.length > 80) {
+      throw new Error("O campo nome ultrapassou os limites de caracteres.");
+    }
+    
+    if (email.length > 80) {
+      throw new Error("O campo e-mail ultrapassou os limites de caracteres.");
+    }
+    
+    if (senha.length > 80) {
+      throw new Error("O campo senha ultrapassou os limites de caracteres.");
+    }
+    
+    return repositorio.Adicionar(pessoa);
+  }
+  
+  async Alterar(id, pessoa){
+    if(!id || isNaN(id)) {
+      throw new Error("Favor corretamente o id.")
+    }
+    
+    return repositorio.Adicionar(pessoa)
+  }
+  
+  async Deletar(id){
+    if(!id || isNaN(id)) {
+      throw new Error("Favor corretamente o id.")
+    }
+    
+    return repositorio.Deletar(id)
+  }
+  
 }
 module.exports = ServicoExercicio
