@@ -4,11 +4,25 @@ const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // regex para verificar se o e
 const repositorio = new RepositorioExercicio()
 class ServicoExercicio {
   
-  async PegarUm(id){
-    if(!id || isNaN(id)) {
-      throw new Error("Favor corretamente o id.")
+  async PegarUm(id) {
+    if (!id || isNaN(id)) {
+      throw new Error("Favor preencher corretamente o id.");
     }
-    return repositorio.PegarUm(id)
+
+    if (id < 0) {
+      throw new Error("Favor preencher o ID corretamente.");
+    }
+    
+    const pessoa = await repositorio.PegarUm(id);
+    
+    if (!pessoa) {
+      throw new Error("Pessoa não encontrada.");
+    }
+    
+    return {
+      nome: pessoa.nome,
+      email: pessoa.email
+    };
   }
   
   async PegarTodos(){
@@ -65,12 +79,20 @@ class ServicoExercicio {
     return repositorio.Adicionar(pessoa);
   }
   
-  async Alterar(id, pessoa){
-    if(!id || isNaN(id)) {
-      throw new Error("Favor corretamente o id.")
+  async Alterar(id, pessoa) {
+    if (!id || isNaN(id)) {
+      throw new Error("Favor preencher corretamente o id.");
     }
     
-    return repositorio.Adicionar(pessoa)
+    const [linhasAfetadas] = await repositorio.Alterar(id, pessoa);
+    
+    if (linhasAfetadas === 0) {
+      throw new Error("Pessoa não encontrada.");
+    }
+    
+    return {
+      message: "Pessoa alterada com sucesso."
+    };
   }
   
   async Deletar(id){
