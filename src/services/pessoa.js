@@ -8,7 +8,7 @@ class ServicoExercicio {
     if (!id || isNaN(id)) {
       throw new Error("Favor preencher corretamente o id.");
     }
-
+    
     if (id < 0) {
       throw new Error("Favor preencher o ID corretamente.");
     }
@@ -26,7 +26,13 @@ class ServicoExercicio {
   }
   
   async PegarTodos(){
-    return repositorio.PegarTodos()
+    const pessoas = await repositorio.PegarTodos();
+    
+    if (pessoas.length <= 0) {
+      throw new Error("Nenhuma pessoa cadastrada.");
+    }
+    
+    return pessoas;
   }
   
   async Adicionar(pessoa) {
@@ -38,7 +44,7 @@ class ServicoExercicio {
       throw new Error("Favor preencher a pessoa.");
     }
     
-    const { nome, email, senha } = pessoa;
+    const { nome, email, senha, isAdmin } = pessoa;
     
     // Campos obrigatórios
     if (!nome || nome.trim() === "") {
@@ -53,6 +59,11 @@ class ServicoExercicio {
       throw new Error("Favor preencher a senha.");
     }
     
+    // Validação do perfil
+    if (isAdmin !== 0 && isAdmin !== 1) {
+      throw new Error("Perfil inválido.");
+    }
+    
     // Validação de e-mail
     if (!emailValido.test(email)) {
       throw new Error("E-mail inválido.");
@@ -61,6 +72,14 @@ class ServicoExercicio {
     // Regras de senha
     if (senha.length < 8) {
       throw new Error("Senha deve possuir mais que 8 caracteres.");
+    }
+    
+    if (!/\d/.test(senha)) {
+      throw new Error("Senha deve possuir ao menos um número.");
+    }
+    
+    if (!/[!@#$%^&*(),.?":{}|<>_\-+=\\[\];'/`~]/.test(senha)) {
+      throw new Error("Senha deve possuir ao menos um caractere especial.");
     }
     
     // Limite de caracteres
