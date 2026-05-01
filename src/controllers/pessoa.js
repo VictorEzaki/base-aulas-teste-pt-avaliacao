@@ -16,11 +16,11 @@ class ControllerExercicio {
       }
     }
 
-    async PegarTodos(_, res){
+    async PegarTodos(req, res){
       try {
         const result = await servico.PegarTodos()
 
-        res.status(201).json(result); 
+        res.status(200).json(result); 
       } catch (error) {
         res.status(500).json({ message: error.message});
       }
@@ -44,13 +44,13 @@ class ControllerExercicio {
     async Alterar(req, res){
       try {
         const id = req.params.id
-        const nome = req.body.nome
+        const { pessoa } = req.body
     
-        await servico.Alterar(id, nome)
+        const message = await servico.Alterar(id, pessoa)
           
-        res.status(200).json({ message: "Alterado com sucesso!"});
+        res.status(200).json({ message: message});
       } catch (error) {
-        res.status(500).json({ message: error.errors.message || error.message});
+        res.status(500).json({ message: error.parent?.message || error.message});
         
       }
     }

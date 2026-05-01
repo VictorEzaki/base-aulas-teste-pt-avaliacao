@@ -19,6 +19,10 @@ const Pessoa = sequelize.define('pessoas', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    isAdmin: {
+        type: DataTypes.TINYINT,
+        allowNull: false
+    }
 }, {
     createdAt: false,
     updatedAt: false
